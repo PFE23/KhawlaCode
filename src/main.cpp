@@ -22,9 +22,6 @@ void setup(){
 }
 
 void loop(){
-  Serial.printf("%d;%d;%d;%d;%d;%d;%d;%d\n",
-  stats.currentCycle.starTime, stats.currentCycle.endTime, cycleDuration(stats.currentCycle),
-  cycleDuration(stats.minCycle), cycleDuration(stats.maxCycle),
-  stats.totalWorkingTime, stats.totalSleepingTime, cycles->size());
+  printStats();
   delay(2000);
 }
