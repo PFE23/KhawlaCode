@@ -19,9 +19,10 @@ void setup(){
   cycles->clear();
   Serial.printf("The size of stats is %d bytes\n", sizeof(stats_t));
   Serial.printf("start;stop;dur;shortD;longD;work;sleep;size\n");
+  //Serial.printf("start;start;stop;stop;dur;dur;shortD;shortD;longD;longD;work;work;sleep;sleep;size\n");
 }
 
 void loop(){
-  printStats();
-  delay(2000);
+  printStats2();
+  delay(1000);
 }

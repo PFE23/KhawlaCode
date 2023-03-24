@@ -2,6 +2,7 @@
 #define CYCLE_H
 #include <Arduino.h>
 #include <SecuredLinkedList.h>
+#include <ctime>
 /**
  * @brief Handle the starting and ending time of a cycle.
  * 
@@ -23,11 +24,10 @@ stats_t stats;
 SecuredLinkedList<cycle_t> *cycles = new SecuredLinkedList<cycle_t>();
 bool isOnCycle = false;
 
-unsigned long cycleDuration(cycle_t c){
-  unsigned long d = c.endTime - c.starTime;
-  if(d < 0) return 0;
-  return d;
-  //return (d < 0) ? 0 : d;
+long cycleDuration(cycle_t c){
+  long d = c.endTime - c.starTime;
+  
+  return (d < 0) ? 0 : d;
 }
 
 unsigned long totalPasTime(cycle_t firstC, cycle_t lastC, unsigned long workTime){
@@ -67,6 +67,40 @@ void IRAM_ATTR stopCycle(){
                                 stats.totalWorkingTime);/**/
     }
   }
+}
+
+//char buffer[ 10 ];
+typedef char hms[10];
+
+char* convert2HMS(unsigned long delayMS){
+  time_t timestamp = delayMS/1000;
+  struct tm * pTime = localtime( & timestamp );
+  static hms buffer;
+  
+  strftime( buffer, 10, "%H:%M:%S", pTime );
+
+  return buffer;
+}
+void testPrintStats(){
+  Serial.printf("%s;%d;%d\n",
+  convert2HMS(stats.currentCycle.starTime), stats.currentCycle.starTime,
+  cycles->size());
+}
+
+void printStats2(){
+  hms starTime, endTime, currentCycle, minCycle, maxCycle, totalWorkingTime, totalSleepingTime;
+  snprintf(starTime, 10, "%s", convert2HMS(stats.currentCycle.starTime));
+  snprintf(endTime, 10, "%s", convert2HMS(stats.currentCycle.endTime));
+  snprintf(currentCycle, 10, "%s", convert2HMS(cycleDuration(stats.currentCycle)));
+  snprintf(minCycle, 10, "%s", convert2HMS(cycleDuration(stats.minCycle)));
+  snprintf(maxCycle, 10, "%s", convert2HMS(cycleDuration(stats.maxCycle)));
+  snprintf(totalWorkingTime, 10, "%s", convert2HMS(stats.totalWorkingTime));
+  snprintf(totalSleepingTime, 10, "%s", convert2HMS(stats.totalSleepingTime));
+
+  Serial.printf("%s;%s;%s;%s;%s;%s;%s;%d\n",
+  starTime, endTime, currentCycle,
+  minCycle, maxCycle, totalWorkingTime, totalSleepingTime,
+  cycles->size());
 }
 
 void printStats(){
