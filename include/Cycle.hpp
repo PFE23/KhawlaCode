@@ -8,16 +8,16 @@
  * 
  */
 typedef struct{
-  unsigned long starTime = 0;
-  unsigned long endTime = 0;
+  time_t starTime = 0;
+  time_t endTime = 0;
 } cycle_t;
 
 typedef struct{
   cycle_t minCycle;
   cycle_t maxCycle;
   cycle_t currentCycle;
-  unsigned long totalWorkingTime = 0;
-  unsigned long totalSleepingTime = 0;
+  time_t totalWorkingTime = 0;
+  time_t totalSleepingTime = 0;
 }stats_t;
 
 stats_t stats;
@@ -30,7 +30,7 @@ long cycleDuration(cycle_t c){
   return (d < 0) ? 0 : d;
 }
 
-unsigned long totalPasTime(cycle_t firstC, cycle_t lastC, unsigned long workTime){
+time_t totalPasTime(cycle_t firstC, cycle_t lastC, time_t workTime){
   return firstC.endTime - lastC.starTime - workTime;
 }
 
@@ -72,7 +72,7 @@ void IRAM_ATTR stopCycle(){
 //char buffer[ 10 ];
 typedef char hms[10];
 
-char* convert2HMS(unsigned long delayMS){
+char* convert2HMS(time_t delayMS){
   time_t timestamp = delayMS/1000;
   struct tm * pTime = localtime( & timestamp );
   static hms buffer;
