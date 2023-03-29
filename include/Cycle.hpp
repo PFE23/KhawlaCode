@@ -104,6 +104,7 @@ void printStats2(){
   cycles->size());
 }
 
+
 void printStats(){
   Serial.printf("%d;%d;%d;%d;%d;%d;%d;%d\n",
   stats.currentCycle.starTime, stats.currentCycle.endTime, cycleDuration(stats.currentCycle),
