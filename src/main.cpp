@@ -3,6 +3,9 @@
 #include "Button.hpp"
 #include "Cycle.hpp"
 #include <WiFi.h>
+#include <WebServer.h>
+#include <WebSockets.h>
+#include "myWebPage.hpp"
 
 
 #define PIN_START_BUTTON  23
@@ -13,6 +16,8 @@
 
 Button start(PIN_START_BUTTON);
 Button stop(PIN_STOP_BUTTON);
+
+WebServer server(80);
 
 time_t startTime;
 
@@ -32,6 +37,9 @@ void setup(){
     delay(2000);
   }
   Serial.print(WiFi.localIP());
+  server.on("/", []() {
+    server.send(200, "text/html", myPage);});
+  server.begin();
 
   startTime = millis();
   Serial.printf("start;stop;dur;shortD;longD;work;sleep;size\n");
@@ -39,6 +47,7 @@ void setup(){
 }
 
 void loop(){
+  server.handleClient();
   time_t now = millis();
   if (now - startTime > WAITTIME){
     printStats2();

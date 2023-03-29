@@ -38,6 +38,7 @@ void printCycle(cycle_t c){
   Serial.printf("[%d --> %d]", c.starTime, c.endTime);
 }
 
+// TODO make this function uninterruptible
 void IRAM_ATTR startCycle(){
   if(!isOnCycle){
     stats.currentCycle.starTime = millis();
@@ -45,7 +46,7 @@ void IRAM_ATTR startCycle(){
     digitalWrite(PIN_LED, HIGH);
   }
 }
-
+// TODO make this function uninterruptible
 void IRAM_ATTR stopCycle(){
   if(isOnCycle){
     stats.currentCycle.endTime = millis();
