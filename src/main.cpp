@@ -1,4 +1,3 @@
-#define PIN_LED           BUILTIN_LED
 #include <Arduino.h>
 #include "Button.hpp"
 #include "Cycle.hpp"
@@ -11,15 +10,21 @@
 
 #define PIN_START_BUTTON  23
 #define PIN_STOP_BUTTON   22
-#define ssid              "Redmi Note 11"
-#define password          "isetbeja"
-#define WAITTIME          2000
+/*#define ssid              "Redmi Note 11"
+#define password          "isetbeja"*/
+#define ssid              "ESP32Server"
+#define password          "esp"
+#define WAITTIME          5000
 
 Button start(PIN_START_BUTTON);
 Button stop(PIN_STOP_BUTTON);
 
 WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
+IPAddress staticIP(192, 168, 18, 1);
+// IPAddress gateway(192, 168, 18, 1);
+IPAddress subnet(255, 255, 255, 0);
+IPAddress dns(8, 8, 8, 8);
 
 time_t startTime;
 
@@ -72,6 +77,26 @@ void setup(){
   cycles->clear();
   Serial.printf("The size of stats is %d bytes\n", sizeof(stats_t));
   // Connecting to WiFi
+  WiFi.mode(WIFI_STA);
+  //if (WiFi.config(staticIP, staticIP, subnet, dns, dns) == false) {
+  if (!WiFi.softAPConfig(staticIP, staticIP, subnet)) {
+    Serial.println("Configuration failed.");
+  }
+  WiFi.softAP(ssid);
+  IPAddress IP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(IP);
+  /*
+  WiFi.mode(WIFI_AP_STA);
+  IPAddress Ip(192, 168, 1, 1);
+  IPAddress NMask(255, 255, 255, 0);
+  WiFi.softAPConfig(Ip, Ip, NMask);
+
+  WiFi.softAP(ssid);
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.println(myIP);
+  */
+  /*
   Serial.print("Connecting to WiFi ");
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED){
@@ -79,6 +104,7 @@ void setup(){
     delay(2000);
   }
   Serial.print(WiFi.localIP());
+  */
   server.on("/", []() {
     server.send(200, "text/html", myPage);});
   server.begin();
@@ -99,4 +125,5 @@ void loop(){
     printStatsJ();
     startTime = now;
   }
+  delay(1000);
 }

@@ -3,6 +3,7 @@
 #include <Arduino.h>
 #include <SecuredLinkedList.h>
 #include <ctime>
+#define PIN_LED           BUILTIN_LED
 /**
  * @brief Handle the starting and ending time of a cycle.
  * 
