@@ -26,7 +26,7 @@ void MyLiquidCrystal::welcomeMessage(){
 
 void MyLiquidCrystal::updateValues(size_t nb, size_t nb1
     , hmss mn, hmss mx, hmss tw, hmss tp){
-  lcd.clear();
+  //lcd.clear();
   lcd.setCursor(0, 0);
   lcd.printf("Pieces : %03d --> %03d", nb, nb1);
   lcd.setCursor(0, 1);

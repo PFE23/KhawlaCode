@@ -11,7 +11,7 @@
 
 
 #define PIN_START_BUTTON  23
-#define PIN_STOP_BUTTON   22
+#define PIN_STOP_BUTTON   32
 /*#define ssid              "Redmi Note 11"
 #define password          "isetbeja"*/
 #define ssid              "ESP32Server"
@@ -54,6 +54,8 @@ void printStatsJ(){
   serializeJson(doc, jsonString);                   // convert JSON object to string
   //Serial.println(jsonString);                       // print JSON string to console for debug purposes (you can comment this out)
   webSocket.broadcastTXT(jsonString);
+  lcd.updateValues(cycles->size(), cycles->size() + isOnCycle, minCycle,
+  maxCycle, totalWorkingTime, totalSleepingTime);
 
 
   /*snprintf(starTime, 10, "%s", convert2HMS(stats.currentCycle.starTime));
@@ -117,8 +119,8 @@ void setup(){
   
   // LCD
   lcd.welcomeMessage();
-  lcd.updateValues(3, 4, "00:01:33", "00:05:33", "00:10:33"
-  , "00:11:33");
+  /*lcd.updateValues(3, 4, "00:01:33", "00:05:33", "00:10:33"
+  , "00:11:33");*/
 }
 
 
