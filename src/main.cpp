@@ -30,6 +30,7 @@ IPAddress dns(8, 8, 8, 8);
 
 time_t startTime;
 
+
 void printStatsJ(){
   hms starTime, endTime, currentCycle, minCycle, maxCycle, totalWorkingTime, totalSleepingTime;
   String jsonString = "";
@@ -119,6 +120,8 @@ void setup(){
   
   // LCD
   lcd.welcomeMessage();
+  printStats2();
+  printStatsJ();
   /*lcd.updateValues(3, 4, "00:01:33", "00:05:33", "00:10:33"
   , "00:11:33");*/
 }
@@ -127,11 +130,13 @@ void setup(){
 void loop(){
   server.handleClient();
   webSocket.loop();
-  time_t now = millis();
-  if (now - startTime > WAITTIME){
+  // time_t now = millis();
+  // if (now - startTime > WAITTIME){
+  if(bUpdateDisplay){
     printStats2();
     printStatsJ();
-    startTime = now;
+    bUpdateDisplay = false;
+    // startTime = now;
   }
-  delay(1000);
+  //delay(1000);
 }

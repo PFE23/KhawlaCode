@@ -24,6 +24,7 @@ typedef struct{
 stats_t stats;
 SecuredLinkedList<cycle_t> *cycles = new SecuredLinkedList<cycle_t>();
 bool isOnCycle = false;
+bool bUpdateDisplay = false;
 
 long cycleDuration(cycle_t c){
   long d = c.endTime - c.starTime;
@@ -45,6 +46,7 @@ void IRAM_ATTR startCycle(){
     stats.currentCycle.starTime = millis();
     isOnCycle = true;
     digitalWrite(PIN_LED, HIGH);
+    bUpdateDisplay = true;
   }
 }
 // TODO make this function uninterruptible
@@ -68,6 +70,7 @@ void IRAM_ATTR stopCycle(){
       stats.totalSleepingTime = totalPasTime(stats.currentCycle, cycles->get(cycles->size()-1), 
                                 stats.totalWorkingTime);/**/
     }
+    bUpdateDisplay = true;
   }
 }
 
